@@ -21,7 +21,7 @@ from nnf.operators import iff
 '''
 Below are some initial 5x5 states we use for testing our code
 
-INITIAL STATE VARIABLE EXPLANATION
+INITIAL STATE VARIABLE EXPLANATION:
 -1: unknown square
 -2: known mine (in a real game, this would be a flag)
 0 <= n <= 8: uncovered spot with n adjacent bombs (includes diagonals)
@@ -350,8 +350,8 @@ def print_state(state, num):
     """
     Prints the minesweeper state similar to how it would look in a real game
 
-    Prints a 'box' with each square being a number (of adjacent mines), a
-    question mark (unknown) or an M (mine). Also includes the state number
+    Prints a 'box' with each square being either a number (of adjacent mines),
+    a question mark (unknown) or an M (mine). Also includes the state number
 
     @param state: a 5x5 minesweeper grid
            num: the state 'number' (either a pre-define state or 'new')
@@ -374,6 +374,28 @@ def print_state(state, num):
                 print(" ", end='')
         print('|')
     print("-----------\n")
+
+
+def use_predefined_state():
+    """
+    Prompts the user with the predefined states and tests the chosen state
+    """
+    num_states = len(states)
+
+    print("Here the the predefined states:")
+    for i in range(num_states):
+        print_state(states[i], i+1)
+    while True:
+        choice = input("Choose a state between 1 and %d: " %(num_states))
+        try: 
+            choice = int(choice.strip())
+            if 1 <= choice <= num_states:
+                test_state(choice)
+                break
+            else:
+                print("Invalid choice\n")
+        except:
+            print("Invalid choice\n")
 
 
 def make_mine_state():
@@ -444,7 +466,7 @@ def test_state(state_num):
     Tests one of our minesweeper states and prints:
         -A visual representation of the state
         -The state's satisfiability
-        -The expected result of the state (for pre-defined states)
+        -The expected result of the state (for predefined states)
         -The result calculated by the encoding
         -A prompt to print all of the state variables
 
@@ -456,7 +478,7 @@ def test_state(state_num):
     create_encoding(state)    # Adds the constraints and state variables
     solution = E.solve()      # Solves the encoding
 
-    # Prints another diagram of the grid if it is a pre-defined state
+    # Prints another diagram of the grid if it is a predefined state
     # (the completed user-created state is already printed out)
     if state_num < len(states) - 1:
         print_state(state, state_num + 1)
@@ -531,16 +553,13 @@ if __name__ == "__main__":
     """
     For testing purposes
 
-    Prompts the user to decide if they want to use a pre-defined state
+    Prompts the user to decide if they want to use a predefined state
     or create their own, then solves the given state and outputs the result
     """
 
-    num_states = len(states)
-    choice = ''
-
-    # Loops until the user chooses to use a pre-defined state or make their own
+    # Loops until the user chooses to use a predefined state or make their own
     while True:
-        choice = input("Would you like to use a pre-defined state? (y/n)? ")
+        choice = input("Would you like to use a predefined state? (y/n)? ")
         choice.strip().lower()
         if choice == 'y' or choice == 'n':
             break
@@ -548,20 +567,6 @@ if __name__ == "__main__":
             print("Invalid choice\n")
 
     if choice == 'y':
-        print("Here the the pre-defined states:")
-        for i in range(num_states):
-            print_state(states[i], i+1)
-
-        while True:
-            choice = input("Choose a state between 1 and %d: " %(num_states))
-            try: 
-                choice = int(choice.strip())
-                if 1 <= choice <= num_states:
-                    test_state(choice)
-                    break
-                else:
-                    print("Invalid choice\n")
-            except:
-                print("Invalid choice\n")
+        use_predefined_state()
     else:
         make_mine_state()
