@@ -463,7 +463,7 @@ def test_state(state_num):
 
     # Prints if the encoding is satisfiable, the expected result and model result
     print("SATISFIABLE: " + str(E.is_satisfiable()) + "\n")
-    if 0 <= state_num < len(states) - 1:
+    if 0 <= state_num < len(states):
         print("Expected result:", expected[state_num])
     print("Model result: %s\n" % get_solution(solution))
 

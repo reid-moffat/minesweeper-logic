@@ -1,0 +1,20 @@
+[[package]]
+category = "main"
+description = "Manipulate NNF (Negation Normal Form) logical sentences"
+name = "nnf"
+optional = false
+python-versions = ">=3.4"
+version = "0.3.0"
+
+[package.extras]
+pysat = ["python-sat"]
+
+[metadata]
+content-hash = "4f265b114d6c03ff21a717e00f5c7d440646e3154d73757c11bdb4161fbaed8a"
+python-versions = "^3.8"
+
+[metadata.files]
+nnf = [
+    {file = "nnf-0.3.0-py3-none-any.whl", hash = "sha256:7159eb37bb2c2dbb3aeb3929a0b46547cc10e0f9d9d08b71b3d60a6047220906"},
+    {file = "nnf-0.3.0.tar.gz", hash = "sha256:5051b13ef4c6116c3d2a1d2e556747bcdb62133d05b0b6fbd32c7f5249bd086d"},
+]
