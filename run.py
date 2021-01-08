@@ -1,7 +1,10 @@
 """
 Queen's University - CISC 204
 Course Modelling Project: Minesweeper solver
-Completion date: December 6th, 2020
+Submission date: December 6th, 2020
+
+Formatting and documentation improvements done by
+Reid Moffat after submission
 
 @author Graham Carkner,
         Elliot Arbuthnot,
@@ -21,7 +24,10 @@ from nnf.operators import iff
 '''
 Below are some initial 5x5 states we use for testing our code
 
-INITIAL STATE VARIABLE EXPLANATION:
+Each state represents a minesweeper state, which each element being a square on
+a 5x5 grid in the same relative location as shown here
+
+Notation explanation:
 -1: unknown square
 -2: known mine (in a real game, this would be a flag)
 0 <= n <= 8: uncovered spot with n adjacent bombs (includes diagonals)
