@@ -22,13 +22,13 @@ from nnf import Var
 from nnf.operators import iff
 
 '''
-Below are some initial 5x5 states we use for testing our code
-
-Each state represents a minesweeper state, which each element being a square on
-a 5x5 grid in the same relative location as shown here
+Below are some initial 5x5 states that are used for testing the code
+-Each 2-D list represents a minesweeper state
+-Each integer element is a square on a 5x5 grid
+-See '4th state example.PNG' for a real minesweeper state example
 
 Notation explanation:
--1: unknown square
+-1: unknown square (middle square is always -1 because it is being solved for)
 -2: known mine (in a real game, this would be a flag)
 0 <= n <= 8: uncovered spot with n adjacent bombs (includes diagonals)
 '''
@@ -155,7 +155,7 @@ Notes:
     Important: It is not possible in our case to have a True x condition and a
     True y condition. This would occur if a square is a satisfied x with no
     adjacent unknown squares; but this won't happen because the middle square is
-    unknown and we only find x and y conditions for the inner 8 squares
+    unknown and we only find x and y conditions for the inner ring of 8 squares
 
 -If a square is not revealed, it has to be one of the three revelaed conditions:
     1. If we know the square is a mine, m is True and all other conditions are False
