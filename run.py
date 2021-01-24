@@ -157,7 +157,7 @@ Notes:
     adjacent unknown squares; but this won't happen because the middle square is
     unknown and we only find x and y conditions for the inner ring of 8 squares
 
--If a square is not revealed, it has to be one of the three revelaed conditions:
+-If a square is not revealed, it has to be one of the three revealed conditions:
     1. If we know the square is a mine, m is True and all other conditions are False
     2. If we know the square is safe, s is True and all other conditions are False
     3. If we don't know if the square is a mine or safe, u is True and all other
@@ -205,7 +205,7 @@ E = Encoding()
 
 def set_initial_state(grid_setup):
     """
-    Sets the inital state of a grid
+    Sets the initial state of a grid
 
     @param grid_setup: a 5x5 2-dimensional list of a grid state
     """
@@ -216,14 +216,15 @@ def set_initial_state(grid_setup):
         for j in grid_range:
             # These create objects for each condition and state in the form
             # mij, uij and sij. For example, m12 would be the condition that
-            # the square at coordinates (1, 2) is a bomb (coords start at (0, 0))
+            # the square at coordinates (1, 2) is a bomb (coordinates start
+            # at (0, 0))
             m[i].append(Var('m' + str(i) + str(j)))
             u[i].append(Var('u' + str(i) + str(j)))
             s[i].append(Var('s' + str(i) + str(j)))
 
             # Each square's state is checked and constraints are added
             # The if conditional is used to ignore the center square since
-            # we don't need constrainsts for it
+            # we don't need constraints for it
             if not (i == 2 and j == 2):
                 state = grid_setup[i][j]
                 # Raises an exception if a square has an illegal value
@@ -255,14 +256,14 @@ def set_initial_state(grid_setup):
             # The outer ring of squares can sometimes be determined for x and
             # y values, but that is beyond our scope
             if 0 < i < 4 and 0 < j < 4:
-                set_X_truth(grid_setup, i, j)
-                set_Y_truth(grid_setup, i, j)
+                set_x_truth(grid_setup, i, j)
+                set_y_truth(grid_setup, i, j)
             else:
                 x[i].append(Var("x" + str(i) + str(j)))
                 y[i].append(Var("y" + str(i) + str(j)))
 
 
-def set_X_truth(grid_setup, i, j):
+def set_x_truth(grid_setup, i, j):
     """
     Sets the x truth values a given square in a grid
 
@@ -272,14 +273,14 @@ def set_X_truth(grid_setup, i, j):
     """
 
     # This constant list is used to quickly get the coordinates of adjacent squares
-    coords = [[i - 1, j - 1], [i - 1, j], [i - 1, j + 1],
-              [  i  , j - 1],             [  i  , j + 1],
-              [i + 1, j - 1], [i + 1, j], [i + 1, j + 1]]
+    coordinates = [[i - 1, j - 1], [i - 1, j], [i - 1, j + 1],
+                   [  i  , j - 1],             [  i  , j + 1],
+                   [i + 1, j - 1], [i + 1, j], [i + 1, j + 1]]
     counter = 0  # Used for counting the number of adjacent mines
 
-    for n in range(len(coords)):
-        adjacent_row = coords[n][0]
-        adjacent_col = coords[n][1]
+    for n in range(len(coordinates)):
+        adjacent_row = coordinates[n][0]
+        adjacent_col = coordinates[n][1]
         # The following conditional checks if the nth adjacent square is a mine
         if grid_setup[adjacent_row][adjacent_col] == -2:
             counter += 1
@@ -293,7 +294,7 @@ def set_X_truth(grid_setup, i, j):
         E.add_constraint(~x[i][j])
 
 
-def set_Y_truth(grid_setup, i, j):
+def set_y_truth(grid_setup, i, j):
     """
     Sets the y truth values a given square in a grid
 
@@ -303,13 +304,13 @@ def set_Y_truth(grid_setup, i, j):
     """
 
     # This constant list is used to quickly get the coordinates of adjacent squares
-    coords = [[i - 1, j - 1], [i - 1, j], [i - 1, j + 1],
-              [  i  , j - 1],             [  i  , j + 1],
-              [i + 1, j - 1], [i + 1, j], [i + 1, j + 1]]
+    coordinates = [[i - 1, j - 1], [i - 1, j], [i - 1, j + 1],
+                   [  i  , j - 1],             [  i  , j + 1],
+                   [i + 1, j - 1], [i + 1, j], [i + 1, j + 1]]
     counter = 0  # Used for counting the number of adjacent mines or unknown squares
 
-    for n in range(len(coords)):
-        adjacent_square = grid_setup[coords[n][0]][coords[n][1]]
+    for n in range(len(coordinates)):
+        adjacent_square = grid_setup[coordinates[n][0]][coordinates[n][1]]
         # The following conditional checks if the nth adjacent square is a mine
         # or unknown
         if adjacent_square == -1 or adjacent_square == -2:
@@ -391,11 +392,11 @@ def use_predefined_state():
     for i in range(num_states):
         print_state(states[i], i + 1)
     while True:
-        choice = input("Choose a state between 1 and %d: " % (num_states))
+        state = input("Choose a state between 1 and %d: " % num_states)
         try:
-            choice = int(choice.strip())
-            if 1 <= choice <= num_states:
-                test_state(choice)
+            state = int(state.strip())
+            if 1 <= state <= num_states:
+                test_state(state)
                 break
             else:
                 print("Invalid choice\n")
@@ -420,7 +421,7 @@ def make_mine_state():
 
     # Prints out some instructions for how to properly input states
     print("\n=====CUSTOM STATE CREATION=====")
-    print("Enter states row by row, Each square seperated by a space.")
+    print("Enter states row by row, Each square separated by a space.")
     print("Ex. input: -1 -1 2 1 -2")
     print("Center spot should be unknown (-1), this is what it is solving for.")
     print("Key:")
@@ -433,7 +434,7 @@ def make_mine_state():
         # Print out intermediate state
         print_state(new_state, "new")
 
-        # Promts the user to input a row, checks if it is valid and applies 
+        # Prompts the user to input a row, checks if it is valid and applies
         # it to the state if it is. If not, loop until a valid row is inputted
         while True:
             spot = input("Enter row %d: " % (i + 1))
@@ -461,7 +462,7 @@ def make_mine_state():
     print_state(new_state, "new")
 
     # If the user creates their own state, it is added to the list of states
-    # (for the duration of the program) and prompty tested
+    # (for the duration of the program) and tested
     states.append(new_state)
     test_state(len(states))
 
@@ -515,7 +516,7 @@ def test_state(state_num):
                         print(keym, solution[keym])
                         print(keyx, solution[keyx])
                         print(keyy, solution[keyy])
-                        if (i == 2 and j == 2):
+                        if i == 2 and j == 2:
                             print("s22", solution["s22"])
                         print()
                 break
@@ -532,12 +533,12 @@ def get_solution(solution):
     Returns the english representation of the solution
 
     @param solution: a solved 5x5 minesweeper model (using E.solve())
-    @return 'schrodinger's mine': if the middle square is simulatnaously a mine
+    @return 'schrodinger's mine': if the middle square is simultaneously a mine
                 and not a mine (you inputted an impossible state)
             'mine': if the middle square is a mine
             'safe': if the middle square is safe
             'unknown': if the middle square is unknown
-            <error message>: if the grid could not be solved or an error occured
+            <error message>: if the grid could not be solved or an error occurred
                 (this should not happen, check constraints if you see this)
     """
 
@@ -551,7 +552,7 @@ def get_solution(solution):
         return "unknown"
     except:
         return "error: key 'm22' or 's22' does not exist.\
-                Model is not satisfiable or an error occured"
+                Model is not satisfiable or an error occurred"
 
 
 if __name__ == "__main__":
