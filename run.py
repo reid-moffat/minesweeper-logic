@@ -35,83 +35,83 @@ Notation explanation:
 
 # State 1 is a mine
 state_1 = [
-  [1, -1, -1, -1, -1],
-  [1, -1, -1, -1,  2],
-  [2, -2, -1,  3,  2],
-  [3, -2,  5, -2,  1],
-  [3, -2,  3,  1,  1]
+    [1, -1, -1, -1, -1],
+    [1, -1, -1, -1, 2],
+    [2, -2, -1, 3, 2],
+    [3, -2, 5, -2, 1],
+    [3, -2, 3, 1, 1]
 ]
 
 # State 2 is a mine
 state_2 = [
-  [2,  1,  1,  2, -2],
-  [1,  2, -1, -1, -1],
-  [1,  3, -1,  1, -1],
-  [1, -2, -1, -1,  3],
-  [1,  1,  2,  2, -1]
+    [2, 1, 1, 2, -2],
+    [1, 2, -1, -1, -1],
+    [1, 3, -1, 1, -1],
+    [1, -2, -1, -1, 3],
+    [1, 1, 2, 2, -1]
 ]
 
 # State 3 is safe
 state_3 = [
-  [-1, -1, -1, -1, -1],
-  [-1, -1,  1,  0, -1],
-  [-1,  1, -1,  1, -1],
-  [-1,  0,  1, -2, -1],
-  [-1, -1, -1, -1, -1]
+    [-1, -1, -1, -1, -1],
+    [-1, -1, 1, 0, -1],
+    [-1, 1, -1, 1, -1],
+    [-1, 0, 1, -2, -1],
+    [-1, -1, -1, -1, -1]
 ]
 
 # State 4 is a mine
 state_4 = [
-  [ 1,  1,  1,  0,  0],
-  [ 1, -2,  2,  1,  0],
-  [ 2,  3, -1,  1,  0],
-  [ 2, -2,  3,  2,  1],
-  [-1, -1, -1, -1, -1]
+    [1, 1, 1, 0, 0],
+    [1, -2, 2, 1, 0],
+    [2, 3, -1, 1, 0],
+    [2, -2, 3, 2, 1],
+    [-1, -1, -1, -1, -1]
 ]
 
 # State 5 is a mine
 state_5 = [
-  [ 1,  1,  1, 0, 0],
-  [ 1, -2,  2, 1, 0],
-  [ 2, -1, -1, 1, 0],
-  [-1, -1, -1, 1, 0],
-  [ 0,  0,  0, 0, 0]
+    [1, 1, 1, 0, 0],
+    [1, -2, 2, 1, 0],
+    [2, -1, -1, 1, 0],
+    [-1, -1, -1, 1, 0],
+    [0, 0, 0, 0, 0]
 ]
 
 # State 6 is unknown
 state_6 = [
-  [-1, -1, -1, -1, -1],
-  [-1, -1, -1, -1, -1],
-  [-1, -1, -1, -1, -1],
-  [-1, -1, -1, -1, -1],
-  [-1, -1, -1, -1, -1]
+    [-1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1]
 ]
 
 # State 7 is safe
 state_7 = [
-  [0,  0,  0,  0, 0],
-  [0, -1, -2,  1, 0],
-  [0, -1, -1, -1, 0],
-  [0, -1, -1, -1, 0],
-  [0,  0,  0,  0, 0]
+    [0, 0, 0, 0, 0],
+    [0, -1, -2, 1, 0],
+    [0, -1, -1, -1, 0],
+    [0, -1, -1, -1, 0],
+    [0, 0, 0, 0, 0]
 ]
 
 # State 8 is unknown
 state_8 = [
-  [-1, -1,  1, -1, -1],
-  [-1,  2, -2,  2, -1],
-  [-1, -1, -1, -1, -1],
-  [-1,  2, -1, -1, -1],
-  [-1, -1, -1, -1, -1]
+    [-1, -1, 1, -1, -1],
+    [-1, 2, -2, 2, -1],
+    [-1, -1, -1, -1, -1],
+    [-1, 2, -1, -1, -1],
+    [-1, -1, -1, -1, -1]
 ]
 
 # State 9 is unknown
 state_9 = [
-  [1,  2, -1, -1,  2],
-  [1, -2,  3,  3, -2],
-  [1,  2, -1,  2,  1],
-  [1,  3, -1,  3,  1],
-  [1, -2, -2, -2,  1]
+    [1, 2, -1, -1, 2],
+    [1, -2, 3, 3, -2],
+    [1, 2, -1, 2, 1],
+    [1, 3, -1, 3, 1],
+    [1, -2, -2, -2, 1]
 ]
 
 # Keeps all the states together for ease of access
@@ -164,41 +164,40 @@ Notes:
     conditions are False
 '''
 
-
 # The x boolean condition for each square
-x = [[], # row 1 
-    [],  # row 2 
-    [],  # row 3
-    [],  # row 4
-    []]  # row 5
+x = [[],  # row 1
+     [],  # row 2
+     [],  # row 3
+     [],  # row 4
+     []]  # row 5
 
 # The y boolean condition for each square
-y = [[], # row 1 
-    [],  # row 2 
-    [],  # row 3
-    [],  # row 4
-    []]  # row 5
+y = [[],  # row 1
+     [],  # row 2
+     [],  # row 3
+     [],  # row 4
+     []]  # row 5
 
 # The m boolean condition for each square
-m = [[], # row 1 
-    [],  # row 2 
-    [],  # row 3
-    [],  # row 4
-    []]  # row 5
+m = [[],  # row 1
+     [],  # row 2
+     [],  # row 3
+     [],  # row 4
+     []]  # row 5
 
 # The u boolean condition for each square
-u = [[], # row 1
-    [],  # row 2
-    [],  # row 3
-    [],  # row 4
-    []]  # row 5
+u = [[],  # row 1
+     [],  # row 2
+     [],  # row 3
+     [],  # row 4
+     []]  # row 5
 
 # The s boolean condition for each square
-s = [[], # row 1
-    [],  # row 2
-    [],  # row 3
-    [],  # row 4
-    []]  # row 5
+s = [[],  # row 1
+     [],  # row 2
+     [],  # row 3
+     [],  # row 4
+     []]  # row 5
 
 # Encoding initialization
 E = Encoding()
@@ -210,7 +209,7 @@ def set_initial_state(grid_setup):
 
     @param grid_setup: a 5x5 2-dimensional list of a grid state
     """
-    grid_range = range(5) # A range variable used to iterate through the grid
+    grid_range = range(5)  # A range variable used to iterate through the grid
 
     # Instantiates Var objects for u, m and s cases for the 5x5 grid
     for i in grid_range:
@@ -231,19 +230,19 @@ def set_initial_state(grid_setup):
                 if not (-2 <= state <= 8):
                     raise Exception('error: each square of the grid must have a'
                                     ' value between -2 and 8 inclusive. Square '
-                                    '[%d][%d] has a value of %d' %(i, j, state))
+                                    '[%d][%d] has a value of %d' % (i, j, state))
 
-                if state == -2: # mine
+                if state == -2:  # mine
                     E.add_constraint(m[i][j])
                 else:
                     E.add_constraint(~m[i][j])
 
-                if state == -1: # unknown
+                if state == -1:  # unknown
                     E.add_constraint(u[i][j])
                 else:
                     E.add_constraint(~u[i][j])
 
-                if state > -1: # revealed square
+                if state > -1:  # revealed square
                     E.add_constraint(s[i][j])
                 else:
                     E.add_constraint(~s[i][j])
@@ -276,7 +275,7 @@ def set_X_truth(grid_setup, i, j):
     coords = [[i - 1, j - 1], [i - 1, j], [i - 1, j + 1],
               [  i  , j - 1],             [  i  , j + 1],
               [i + 1, j - 1], [i + 1, j], [i + 1, j + 1]]
-    counter = 0 # Used for counting the number of adjacent mines
+    counter = 0  # Used for counting the number of adjacent mines
 
     for n in range(len(coords)):
         adjacent_row = coords[n][0]
@@ -284,7 +283,7 @@ def set_X_truth(grid_setup, i, j):
         # The following conditional checks if the nth adjacent square is a mine
         if grid_setup[adjacent_row][adjacent_col] == -2:
             counter += 1
-    
+
     # Instantiates a Var object for the x condition at the given coordinate and
     # sets a constraint for it
     x[i].append(Var("x" + str(i) + str(j)))
@@ -307,7 +306,7 @@ def set_Y_truth(grid_setup, i, j):
     coords = [[i - 1, j - 1], [i - 1, j], [i - 1, j + 1],
               [  i  , j - 1],             [  i  , j + 1],
               [i + 1, j - 1], [i + 1, j], [i + 1, j + 1]]
-    counter = 0 # Used for counting the number of adjacent mines or unknown squares
+    counter = 0  # Used for counting the number of adjacent mines or unknown squares
 
     for n in range(len(coords)):
         adjacent_square = grid_setup[coords[n][0]][coords[n][1]]
@@ -315,7 +314,7 @@ def set_Y_truth(grid_setup, i, j):
         # or unknown
         if adjacent_square == -1 or adjacent_square == -2:
             counter += 1
-    
+
     # Instantiates the y condition at the given coordinate and sets a constraint
     # for it
     y[i].append(Var("y" + str(i) + str(j)))
@@ -337,7 +336,7 @@ def set_truth_encodings():
     # If there are any adjacent squares with a True x condition, the middle square
     # is safe. See the boolean condition guide (top) for an explanation
     E.add_constraint(iff((x[1][1] | x[1][2] | x[1][3] | x[2][1] | x[2][3]
-                          | x[3][1]| x[3][2] | x[3][3]), s[2][2]))
+                          | x[3][1] | x[3][2] | x[3][3]), s[2][2]))
     # If the middle square isn't a mine or safe, it is unknown
     E.add_constraint(iff(~m[2][2] & ~s[2][2], u[2][2]))
 
@@ -362,9 +361,9 @@ def print_state(state, num):
     @param state: a 5x5 minesweeper grid
            num: the state 'number' (either a pre-define state or 'new')
     """
-    grid_range = range(5) # A range variable used to iterate through the grid
+    grid_range = range(5)  # A range variable used to iterate through the grid
 
-    print("\nSTATE %s:"  %(str(num)))
+    print("\nSTATE %s:" % (str(num)))
     print("-----------")
     for i in grid_range:
         print('|', end='')
@@ -390,10 +389,10 @@ def use_predefined_state():
 
     print("Here the the predefined states:")
     for i in range(num_states):
-        print_state(states[i], i+1)
+        print_state(states[i], i + 1)
     while True:
-        choice = input("Choose a state between 1 and %d: " %(num_states))
-        try: 
+        choice = input("Choose a state between 1 and %d: " % (num_states))
+        try:
             choice = int(choice.strip())
             if 1 <= choice <= num_states:
                 test_state(choice)
@@ -437,9 +436,9 @@ def make_mine_state():
         # Promts the user to input a row, checks if it is valid and applies 
         # it to the state if it is. If not, loop until a valid row is inputted
         while True:
-            spot = input("Enter row %d: " %(i + 1))
+            spot = input("Enter row %d: " % (i + 1))
             try:
-                new_state[i]=[int(x) for x in spot.split()]
+                new_state[i] = [int(x) for x in spot.split()]
                 if len(new_state[i]) == 5:
                     valid_row = True
                     for x in new_state[i]:
@@ -479,10 +478,10 @@ def test_state(state_num):
     @param state_num: the number of the minesweeper state
     """
 
-    state_num -= 1            # State 1 has index 0, state 2 has index 1, etc
-    state = states[state_num] # Gets the state
-    create_encoding(state)    # Adds the constraints and state variables
-    solution = E.solve()      # Solves the encoding
+    state_num -= 1  # State 1 has index 0, state 2 has index 1, etc
+    state = states[state_num]  # Gets the state
+    create_encoding(state)  # Adds the constraints and state variables
+    solution = E.solve()  # Solves the encoding
 
     # Prints another diagram of the grid if it is a predefined state
     # (the completed user-created state is already printed out)
