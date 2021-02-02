@@ -208,6 +208,7 @@ def set_initial_state(grid_setup):
     Sets the initial state of a grid
 
     @param grid_setup: a 5x5 2-dimensional list of a grid state
+    @type grid_setup: list of 5 empty lists
     """
     grid_range = range(5)  # A range variable used to iterate through the grid
 
@@ -268,8 +269,11 @@ def set_x_truth(grid_setup, i, j):
     Sets the x truth values a given square in a grid
 
     @param grid_setup: 5x5 2-dimensional list of a grid state
-           i: row number of the square
-           j: column number of the square
+    @type grid_setup: list of 5 lists of 5 Var objects
+    @param i: row number of the square
+    @type i: integer (1 <= i <= 3)
+    @param j: column number of the square
+    @type j: integer (1 <= j <= 3)
     """
 
     # This constant list is used to quickly get the coordinates of adjacent squares
@@ -299,11 +303,15 @@ def set_y_truth(grid_setup, i, j):
     Sets the y truth values a given square in a grid
 
     @param grid_setup: 5x5 2-dimensional list of a grid state
-           i: row number of the square
-           j: column number of the square
+    @type grid_setup: list of 5 lists of 5 Var objects
+    @param i: row number of the square
+    @type i: integer (1 <= i <= 3)
+    @param j: column number of the square
+    @type j: integer (1 <= j <= 3)
     """
 
     # This constant list is used to quickly get the coordinates of adjacent squares
+    # The given square is in the middle, each adjacent square has the coordinates as shown:
     coordinates = [[i - 1, j - 1], [i - 1, j], [i - 1, j + 1],
                    [  i  , j - 1],             [  i  , j + 1],
                    [i + 1, j - 1], [i + 1, j], [i + 1, j + 1]]
@@ -347,6 +355,7 @@ def create_encoding(grid):
     Calls all the functions in the correct order
 
     @param grid: 5x5 2-dimensional list minesweeper grid
+    @type grid: list of 5 lists of 5 var objects
     """
     set_initial_state(grid)
     set_truth_encodings()
@@ -360,7 +369,9 @@ def print_state(state, num):
     a question mark (unknown) or an M (mine). Also includes the state number
 
     @param state: a 5x5 minesweeper grid
-           num: the state 'number' (either a pre-define state or 'new')
+    @type state: list of 5 lists of 5 var objects
+    @param num: the state 'number'
+    @type num: integer (either a pre-define state number or 'new')
     """
     grid_range = range(5)  # A range variable used to iterate through the grid
 
@@ -477,6 +488,7 @@ def test_state(state_num):
         -A prompt to print all of the state variables
 
     @param state_num: the number of the minesweeper state
+    @type state_num: integer
     """
 
     state_num -= 1  # State 1 has index 0, state 2 has index 1, etc
@@ -533,13 +545,15 @@ def get_solution(solution):
     Returns the english representation of the solution
 
     @param solution: a solved 5x5 minesweeper model (using E.solve())
+    @type solution: list of 5 lists of var objects
     @return 'schrodinger's mine': if the middle square is simultaneously a mine
                 and not a mine (you inputted an impossible state)
-            'mine': if the middle square is a mine
-            'safe': if the middle square is safe
-            'unknown': if the middle square is unknown
-            <error message>: if the grid could not be solved or an error occurred
+    @return 'mine': if the middle square is a mine
+    @return 'safe': if the middle square is safe
+    @return 'unknown': if the middle square is unknown
+    @return <error message>: if the grid could not be solved or an error occurred
                 (this should not happen, check constraints if you see this)
+    @rtype: string
     """
 
     try:
