@@ -7,6 +7,7 @@ from nnf import Var
 # The iff method is used to determine the middle square's state
 from nnf.operators import iff
 
+
 class MinesweeperState:
 
     # The minesweeper state
@@ -17,6 +18,9 @@ class MinesweeperState:
 
     # This state's number for pre-defined states, or "new" for a user defined state
     state_num = ""
+
+    # The solution of this grid
+    solution = None
 
     '''
     Boolean condition guide:
@@ -64,55 +68,52 @@ class MinesweeperState:
 
     # The x boolean condition for each square
     x = [[],  # row 1
-        [],  # row 2
-        [],  # row 3
-        [],  # row 4
-        []]  # row 5
+         [],  # row 2
+         [],  # row 3
+         [],  # row 4
+         []]  # row 5
 
     # The y boolean condition for each square
     y = [[],  # row 1
-        [],  # row 2
-        [],  # row 3
-        [],  # row 4
-        []]  # row 5
+         [],  # row 2
+         [],  # row 3
+         [],  # row 4
+         []]  # row 5
 
     # The m boolean condition for each square
     m = [[],  # row 1
-        [],  # row 2
-        [],  # row 3
-        [],  # row 4
-        []]  # row 5
+         [],  # row 2
+         [],  # row 3
+         [],  # row 4
+         []]  # row 5
 
     # The u boolean condition for each square
     u = [[],  # row 1
-        [],  # row 2
-        [],  # row 3
-        [],  # row 4
-        []]  # row 5
+         [],  # row 2
+         [],  # row 3
+         [],  # row 4
+         []]  # row 5
 
     # The s boolean condition for each square
     s = [[],  # row 1
-        [],  # row 2
-        [],  # row 3
-        [],  # row 4
-        []]  # row 5
+         [],  # row 2
+         [],  # row 3
+         [],  # row 4
+         []]  # row 5
 
     # Encoding initialization
     E = Encoding()
 
-    def __init__(self, new_state, expected_result = None, num="new"):
+    def __init__(self, new_state, expected_result=None, num="new"):
         self.state = new_state[:]
         self.expected = expected_result
         self.state_num = num
-    
 
     def set_square(self, new_value, i, j):
         self.state[i][j] = new_value
-    
 
     def set_row(self, new_row, i):
         self.state[i] = new_row[:]
-
 
     def test_state(self):
         """
@@ -125,7 +126,7 @@ class MinesweeperState:
         """
 
         self.__create_encoding()  # Adds the constraints and state variables
-        solution = self.E.solve()  # Solves the encoding
+        self.solution = self.E.solve()  # Solves the encoding
         
         self.print_state()
 
@@ -133,7 +134,7 @@ class MinesweeperState:
         print("SATISFIABLE: " + str(self.E.is_satisfiable()) + "\n")
         if self.expected:
             print("Expected result:", self.expected)
-        print("Model result: %s\n" % self.get_solution(solution))
+        print("Model result: %s\n" % self.get_solution())
 
         while True:
             print_solution = input("Would you like to see the full solution states (y/n)? ")
@@ -152,12 +153,12 @@ class MinesweeperState:
                             keym = "m" + num
                             keyx = "x" + num
                             keyy = "y" + num
-                            print(keyu, solution[keyu])
-                            print(keym, solution[keym])
-                            print(keyx, solution[keyx])
-                            print(keyy, solution[keyy])
+                            print(keyu, self.solution[keyu])
+                            print(keym, self.solution[keym])
+                            print(keyx, self.solution[keyx])
+                            print(keyy, self.solution[keyy])
                             if i == 2 and j == 2:
-                                print("s22", solution["s22"])
+                                print("s22", self.solution["s22"])
                             print()
                     break
                 elif print_solution == 'n':
@@ -166,18 +167,13 @@ class MinesweeperState:
                     print("Invalid input\n")
             except:
                 print("Invalid input\n")
-    
 
     def __create_encoding(self):
         """
         Calls all the functions in the correct order
-
-        @param grid: 5x5 2-dimensional list minesweeper grid
-        @type grid: list of 5 lists of 5 var objects
         """
         self.__set_initial_state()
         self.__set_truth_encodings()
-    
 
     def __set_initial_state(self):
         """
@@ -236,13 +232,10 @@ class MinesweeperState:
                     self.x[i].append(Var("x" + str(i) + str(j)))
                     self.y[i].append(Var("y" + str(i) + str(j)))
 
-
     def __set_x_truth(self, i, j):
         """
         Sets the x truth values a given square in a grid
 
-        @param grid_setup: 5x5 2-dimensional list of a grid state
-        @type grid_setup: list of 5 lists of 5 Var objects
         @param i: row number of the square
         @type i: integer (1 <= i <= 3)
         @param j: column number of the square
@@ -251,7 +244,7 @@ class MinesweeperState:
 
         # This constant list is used to quickly get the coordinates of adjacent squares
         coordinates = [[i - 1, j - 1], [i - 1, j], [i - 1, j + 1],
-                       [  i  , j - 1],             [  i  , j + 1],
+                       [i, j - 1], [i, j + 1],
                        [i + 1, j - 1], [i + 1, j], [i + 1, j + 1]]
         counter = 0  # Used for counting the number of adjacent mines
 
@@ -270,13 +263,10 @@ class MinesweeperState:
         else:
             self.E.add_constraint(~self.x[i][j])
 
-
     def __set_y_truth(self, i, j):
         """
         Sets the y truth values a given square in a grid
 
-        @param grid_setup: 5x5 2-dimensional list of a grid state
-        @type grid_setup: list of 5 lists of 5 Var objects
         @param i: row number of the square
         @type i: integer (1 <= i <= 3)
         @param j: column number of the square
@@ -286,7 +276,7 @@ class MinesweeperState:
         # This constant list is used to quickly get the coordinates of adjacent squares
         # The given square is in the middle, each adjacent square has the coordinates as shown:
         coordinates = [[i - 1, j - 1], [i - 1, j], [i - 1, j + 1],
-                       [  i  , j - 1],             [  i  , j + 1],
+                       [i, j - 1], [i, j + 1],
                        [i + 1, j - 1], [i + 1, j], [i + 1, j + 1]]
         counter = 0  # Used for counting the number of adjacent mines or unknown squares
 
@@ -305,7 +295,6 @@ class MinesweeperState:
         else:
             self.E.add_constraint(~self.y[i][j])
 
-
     def __set_truth_encodings(self):
         """
         Sets the constraints required to determine the state of the middle square
@@ -323,14 +312,11 @@ class MinesweeperState:
                                    self.x[3][2] | self.x[3][3]), self.s[2][2]))
         # If the middle square isn't a mine or safe, it is unknown
         self.E.add_constraint(iff(~self.m[2][2] & ~self.s[2][2], self.u[2][2]))
-    
 
-    def get_solution(self, solution):
+    def get_solution(self):
         """
         Returns the english representation of the solution
 
-        @param solution: a solved 5x5 minesweeper model (using E.solve())
-        @type solution: list of 5 lists of var objects
         @return 'schrodinger's mine': if the middle square is simultaneously a mine
                     and not a mine (you inputted an impossible state)
         @return 'mine': if the middle square is a mine
@@ -342,17 +328,16 @@ class MinesweeperState:
         """
 
         try:
-            if solution['m22'] and solution['s22']:
+            if self.solution['m22'] and self.solution['s22']:
                 return "schrodinger's mine"
-            if solution['m22']:
+            if self.solution['m22']:
                 return "mine"
-            if solution['s22']:
+            if self.solution['s22']:
                 return "safe"
             return "unknown"
         except:
             return "error: key 'm22' or 's22' does not exist.\
                     Model is not satisfiable or an error occurred"
-
 
     def print_state(self):
         """
@@ -360,11 +345,6 @@ class MinesweeperState:
 
         Prints a 'box' with each square being either a number (of adjacent mines),
         a question mark (unknown) or an M (mine). Also includes the state number
-
-        @param state: a 5x5 minesweeper grid
-        @type state: list of 5 lists of 5 var objects
-        @param num: the state 'number'
-        @type num: integer (either a pre-define state number or 'new')
         """
         grid_range = range(5)  # A range variable used to iterate through the grid
 
