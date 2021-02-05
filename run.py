@@ -33,92 +33,118 @@ m: known mine (in a real game, this would be a flag)
 u = -1
 m = -2
 
-# State 1 is a mine
-state_1 = [
-    [1, -1, -1, -1, -1],
-    [1, -1, -1, -1, 2],
-    [2, -2, -1, 3, 2],
-    [3, -2, 5, -2, 1],
-    [3, -2, 3, 1, 1]
+predefined_states = [
+    # State 1 is a mine
+    [
+        [1, -1, -1, -1, -1],
+        [1, -1, -1, -1, 2],
+        [2, -2, -1, 3, 2],
+        [3, -2, 5, -2, 1],
+        [3, -2, 3, 1, 1]
+    ],
+    "mine",
+
+    # State 2 is a mine
+    [
+        [2, 1, 1, 2, -2],
+        [1, 2, -1, -1, -1],
+        [1, 3, -1, 1, -1],
+        [1, -2, -1, -1, 3],
+        [1, 1, 2, 2, -1]
+    ],
+    "mine",
+
+    # State 3 is safe
+    [
+        [-1, -1, -1, -1, -1],
+        [-1, -1, 1, 0, -1],
+        [-1, 1, -1, 1, -1],
+        [-1, 0, 1, -2, -1],
+        [-1, -1, -1, -1, -1]
+    ],
+    "safe",
+
+    # State 4 is a mine
+    [
+        [1, 1, 1, 0, 0],
+        [1, -2, 2, 1, 0],
+        [2, 3, -1, 1, 0],
+        [2, -2, 3, 2, 1],
+        [-1, -1, -1, -1, -1]
+    ],
+    "mine",
+
+    # State 5 is a mine
+    [
+        [1, 1, 1, 0, 0],
+        [1, -2, 2, 1, 0],
+        [2, -1, -1, 1, 0],
+        [-1, -1, -1, 1, 0],
+        [0, 0, 0, 0, 0]
+    ],
+    "mine",
+
+    # State 6 is unknown
+    [
+        [-1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1]
+    ],
+    "unknown",
+
+    # State 7 is safe
+    [
+        [0, 0, 0, 0, 0],
+        [0, -1, -2, 1, 0],
+        [0, -1, -1, -1, 0],
+        [0, -1, -1, -1, 0],
+        [0, 0, 0, 0, 0]
+    ],
+    "safe",
+
+    # State 8 is unknown
+    [
+        [-1, -1, 1, -1, -1],
+        [-1, 2, -2, 2, -1],
+        [-1, -1, -1, -1, -1],
+        [-1, 2, -1, -1, -1],
+        [-1, -1, -1, -1, -1]
+    ],
+    "unknown",
+
+    # State 9 is unknown
+    [
+        [1, 2, -1, -1, 2],
+        [1, -2, 3, 3, -2],
+        [1, 2, -1, 2, 1],
+        [1, 3, -1, 3, 1],
+        [1, -2, -2, -2, 1]
+    ],
+    "unknown"
 ]
 
-# State 2 is a mine
-state_2 = [
-    [2, 1, 1, 2, -2],
-    [1, 2, -1, -1, -1],
-    [1, 3, -1, 1, -1],
-    [1, -2, -1, -1, 3],
-    [1, 1, 2, 2, -1]
-]
 
-# State 3 is safe
-state_3 = [
-    [-1, -1, -1, -1, -1],
-    [-1, -1, 1, 0, -1],
-    [-1, 1, -1, 1, -1],
-    [-1, 0, 1, -2, -1],
-    [-1, -1, -1, -1, -1]
-]
+def main():
+    """
+    Prompts the user to decide if they want to use a predefined state
+    or create their own, then solves the given state and outputs the result
+    """
 
-# State 4 is a mine
-state_4 = [
-    [1, 1, 1, 0, 0],
-    [1, -2, 2, 1, 0],
-    [2, 3, -1, 1, 0],
-    [2, -2, 3, 2, 1],
-    [-1, -1, -1, -1, -1]
-]
+    # Loops until the user chooses to use a predefined state or make their own
+    while True:
+        choice = input("Would you like to use a predefined state? (y/n)? ")
+        choice.strip().lower()
+        if choice == 'y' or choice == 'n':
+            break
+        else:
+            print("Invalid choice\n")
 
-# State 5 is a mine
-state_5 = [
-    [1, 1, 1, 0, 0],
-    [1, -2, 2, 1, 0],
-    [2, -1, -1, 1, 0],
-    [-1, -1, -1, 1, 0],
-    [0, 0, 0, 0, 0]
-]
-
-# State 6 is unknown
-state_6 = [
-    [-1, -1, -1, -1, -1],
-    [-1, -1, -1, -1, -1],
-    [-1, -1, -1, -1, -1],
-    [-1, -1, -1, -1, -1],
-    [-1, -1, -1, -1, -1]
-]
-
-# State 7 is safe
-state_7 = [
-    [0, 0, 0, 0, 0],
-    [0, -1, -2, 1, 0],
-    [0, -1, -1, -1, 0],
-    [0, -1, -1, -1, 0],
-    [0, 0, 0, 0, 0]
-]
-
-# State 8 is unknown
-state_8 = [
-    [-1, -1, 1, -1, -1],
-    [-1, 2, -2, 2, -1],
-    [-1, -1, -1, -1, -1],
-    [-1, 2, -1, -1, -1],
-    [-1, -1, -1, -1, -1]
-]
-
-# State 9 is unknown
-state_9 = [
-    [1, 2, -1, -1, 2],
-    [1, -2, 3, 3, -2],
-    [1, 2, -1, 2, 1],
-    [1, 3, -1, 3, 1],
-    [1, -2, -2, -2, 1]
-]
-
-# Keeps all the states together for ease of access
-pre_defined_states = [state_1, state_2, state_3, state_4, state_5, state_6, state_7,
-          state_8, state_9]
-expected = ["mine", "mine", "safe", "mine", "mine", "unknown", "safe",
-            'unknown', 'unknown']
+    if choice == 'y':
+        use_pre_defined_state()
+    else:
+        make_mine_state()
 
 
 def use_pre_defined_state():
@@ -126,8 +152,8 @@ def use_pre_defined_state():
     Prompts the user with the predefined states and tests the chosen state
     """
     
-    num_states = len(pre_defined_states)
-    states = [state.MinesweeperState(pre_defined_states[i], i + 1)
+    num_states = len(predefined_states) // 2
+    states = [state.MinesweeperState(predefined_states[2*i], predefined_states[2*i+1], i)
               for i in range(num_states)]
 
     print("Here the the predefined states:")
@@ -136,9 +162,13 @@ def use_pre_defined_state():
     
     while True:
         state_number = input("Choose a state between 1 and %d: " % num_states).strip()
-        if state_number.isnumeric() and 1 <= state_number <= num_states:
-            pre_defined_states[i - 1].test_state()
-            break
+        if state_number.isnumeric():
+            state_number = int(state_number)
+            if 1 <= state_number <= num_states:
+                states[state_number-1].test_state()
+                break
+            else:
+                print("Invalid choice\n")
         else:
             print("Invalid choice\n")
 
@@ -203,24 +233,4 @@ def make_mine_state():
     new_state.test_state()
 
 
-if __name__ == "__main__":
-    """
-    For testing purposes
-
-    Prompts the user to decide if they want to use a predefined state
-    or create their own, then solves the given state and outputs the result
-    """
-
-    # Loops until the user chooses to use a predefined state or make their own
-    while True:
-        choice = input("Would you like to use a predefined state? (y/n)? ")
-        choice.strip().lower()
-        if choice == 'y' or choice == 'n':
-            break
-        else:
-            print("Invalid choice\n")
-
-    if choice == 'y':
-        use_pre_defined_state()
-    else:
-        make_mine_state()
+main()

@@ -100,8 +100,9 @@ class MinesweeperState:
     # Encoding initialization
     E = Encoding()
 
-    def __init__(self, new_state, num="new"):
+    def __init__(self, new_state, expected_result = None, num="new"):
         self.state = new_state[:]
+        self.expected = expected_result
         self.state_num = num
     
 
