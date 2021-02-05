@@ -207,12 +207,12 @@ def make_mine_state():
         # it to the state if it is. If not, loop until a valid row is inputted
         while True:
             spot = input("Enter row %d: " % (i + 1))
-            try: # Make sure all the inputs are numbers
+            try:  # Make sure all the inputs are numbers
                 new_row = [int(x) for x in spot.split()]
-                if len(new_row) == 5: # Must have 5 values in the row
+                if len(new_row) == 5:  # Must have 5 values in the row
                     valid_row = True
                     for x in new_row:
-                        if not (-2 <= x <= 8): # Each value must be valid
+                        if not (-2 <= x <= 8):  # Each value must be valid
                             print("Each value must be in the range [-2, 8]\n")
                             valid_row = False
                     if valid_row:
