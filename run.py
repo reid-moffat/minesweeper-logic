@@ -142,24 +142,27 @@ def main():
             print("Invalid choice\n")
 
     if choice == 'y':
-        use_pre_defined_state()
+        use_predefined_state()
     else:
         make_mine_state()
 
 
-def use_pre_defined_state():
+def use_predefined_state():
     """
     Prompts the user with the predefined states and tests the chosen state
     """
-    
+
+    # predefined_states has a state and its expected result
     num_states = len(predefined_states) // 2
     states = [state.MinesweeperState(predefined_states[2*i], predefined_states[2*i+1], i)
               for i in range(num_states)]
 
+    # Prints out all of the predefined states
     print("Here the the predefined states:")
     for i in states:
         i.print_state()
-    
+
+    # Loops until the user chooses a valid state, then solves the state and prints out details
     while True:
         state_number = input("Choose a state between 1 and %d: " % num_states).strip()
         if state_number.isnumeric():
