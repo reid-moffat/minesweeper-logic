@@ -3,7 +3,7 @@ Queen's University - CISC 204
 Course Modelling Project: Minesweeper solver
 Submission date: December 6th, 2020
 
-Formatting and documentation improvements done by
+Formatting, documentation and general improvements done by
 Reid Moffat after submission
 
 @author Graham Carkner,
@@ -12,118 +12,11 @@ Reid Moffat after submission
         Reid Moffat
 """
 
+# A class to represnt minesweeper states
 import state
 
-'''
-Below are some initial 5x5 states that are used for testing the code
--Each 2-D list represents a minesweeper state
--Each integer element is a square on a 5x5 grid
--See '4th state example.PNG' for a real minesweeper state example
-
-Notation explanation:
-u: unknown square (middle square is always -1 because it is being solved for)
-m: known mine (in a real game, this would be a flag)
-0 <= n <= 8: uncovered spot with n adjacent bombs (includes diagonals)
-'''
-
-# TODO: replace all -1s with u and -2s with m in the states
-
-# Makes the states easier to understand, while still allowing for arithmetic
-# comparisons to check the state
-u = -1
-m = -2
-
-predefined_states = [
-    # State 1 is a mine
-    [
-        [1, -1, -1, -1, -1],
-        [1, -1, -1, -1, 2],
-        [2, -2, -1, 3, 2],
-        [3, -2, 5, -2, 1],
-        [3, -2, 3, 1, 1]
-    ],
-    "mine",
-
-    # State 2 is a mine
-    [
-        [2, 1, 1, 2, -2],
-        [1, 2, -1, -1, -1],
-        [1, 3, -1, 1, -1],
-        [1, -2, -1, -1, 3],
-        [1, 1, 2, 2, -1]
-    ],
-    "mine",
-
-    # State 3 is safe
-    [
-        [-1, -1, -1, -1, -1],
-        [-1, -1, 1, 0, -1],
-        [-1, 1, -1, 1, -1],
-        [-1, 0, 1, -2, -1],
-        [-1, -1, -1, -1, -1]
-    ],
-    "safe",
-
-    # State 4 is a mine
-    [
-        [1, 1, 1, 0, 0],
-        [1, -2, 2, 1, 0],
-        [2, 3, -1, 1, 0],
-        [2, -2, 3, 2, 1],
-        [-1, -1, -1, -1, -1]
-    ],
-    "mine",
-
-    # State 5 is a mine
-    [
-        [1, 1, 1, 0, 0],
-        [1, -2, 2, 1, 0],
-        [2, -1, -1, 1, 0],
-        [-1, -1, -1, 1, 0],
-        [0, 0, 0, 0, 0]
-    ],
-    "mine",
-
-    # State 6 is unknown
-    [
-        [-1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1]
-    ],
-    "unknown",
-
-    # State 7 is safe
-    [
-        [0, 0, 0, 0, 0],
-        [0, -1, -2, 1, 0],
-        [0, -1, -1, -1, 0],
-        [0, -1, -1, -1, 0],
-        [0, 0, 0, 0, 0]
-    ],
-    "safe",
-
-    # State 8 is unknown
-    [
-        [-1, -1, 1, -1, -1],
-        [-1, 2, -2, 2, -1],
-        [-1, -1, -1, -1, -1],
-        [-1, 2, -1, -1, -1],
-        [-1, -1, -1, -1, -1]
-    ],
-    "unknown",
-
-    # State 9 is unknown
-    [
-        [1, 2, -1, -1, 2],
-        [1, -2, 3, 3, -2],
-        [1, 2, -1, 2, 1],
-        [1, 3, -1, 3, 1],
-        [1, -2, -2, -2, 1]
-    ],
-    "unknown"
-]
+# Contains a list of constant states and their solutions (for testing)
+import predefined_states
 
 
 def main():
@@ -134,12 +27,10 @@ def main():
 
     # Loops until the user chooses to use a predefined state or make their own
     while True:
-        choice = input("Would you like to use a predefined state? (y/n)? ")
-        choice.strip().lower()
+        choice = input("Would you like to use a predefined state (y/n)? ").strip().lower()
         if choice == 'y' or choice == 'n':
             break
-        else:
-            print("Invalid choice\n")
+        print("Invalid choice\n")
 
     if choice == 'y':
         use_predefined_state()
@@ -152,10 +43,11 @@ def use_predefined_state():
     Prompts the user with the predefined states and tests the chosen state
     """
 
-    # predefined_states has a state and its expected result
-    num_states = len(predefined_states) // 2
-    states = [state.MinesweeperState(predefined_states[2*i], predefined_states[2*i+1], i)
-              for i in range(num_states)]
+    # predefined_states has an expected result for each state
+    num_states = len(predefined_states.state_list) // 2
+    # Creates a list of all predefeind states as minesweeper state objects
+    states = [state.MinesweeperState(predefined_states.state_list[2*i],
+              predefined_states.state_list[2*i+1], i) for i in range(num_states)]
 
     # Prints out all of the predefined states
     print("Here the the predefined states:")
@@ -182,13 +74,7 @@ def make_mine_state():
     """
     # Initializes a default state of all unknowns
     # This makes it easier to print out intermediary states
-    unknown_state = [
-        [-1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1],
-        [-1, -1, -1, -1, -1]
-    ]
+    unknown_state = [[-1 for i in range(5)] for i in range(5)]
     new_state = state.MinesweeperState(unknown_state)
 
     # Prints out some instructions for how to properly input states
