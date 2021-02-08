@@ -1,4 +1,4 @@
-'''
+"""
 Below are some initial 5x5 states that are used for testing the code
 -Each 2-D list represents a minesweeper state
 -Each integer element is a square on a 5x5 grid
@@ -8,7 +8,7 @@ Notation explanation:
 U: unknown square (middle square is always unknown because it is being solved for)
 M: known mine (in a real game, this would be a flag)
 0 <= n <= 8: uncovered spot with n adjacent bombs (includes diagonals)
-'''
+"""
 
 # Makes the states easier to understand, while still allowing for arithmetic
 # comparisons to check the state
