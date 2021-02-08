@@ -107,9 +107,40 @@ class MinesweeperState:
         self.E = Encoding()
 
     def set_square(self, new_value, i, j):
+        """
+        Sets a specified square in this state to a specified value, raising an exception
+        if a parameter is not in the correct range
+
+        @param new_value: a new value for the square
+        @type new_value: integer (-2 <= new_value <= 8)
+        @param i: column number
+        @type i: integer (0 <= i <= 4)
+        @param j: row number
+        @type j: integer (1 <= j <= 4)
+        """
+        if not isinstance(new_value, int) or new_value < -2 or new_value > 8:
+            raise Exception("error: new value must be an integer in the range [-2, 8]")
+        if not isinstance(i, int) or i < 0 or i > 4:
+            raise Exception("error: column number must be an integer in the range [0, 4]")
+        if not isinstance(j, int) or j < 0 or j > 4:
+            raise Exception("error: row number must be an integer in the range [0, 4]")
         self.state[i][j] = new_value
 
     def set_row(self, new_row, i):
+        """
+        Sets the specified row to a new row (values are copied), raising an exception
+        if a parameter is not in the correct range
+
+        @param new_row: the new row of squares
+        @type new_row: list of five integers in the range [-2, 8]
+        @param i: row number
+        @type i: integer (1 <= i <= 5)
+        """
+        if not isinstance(new_row, list) or len(new_row) != 5 \
+                or not all([True if isinstance(square, int) and -2 <= square <= 8 else False for square in new_row]):
+            raise Exception("error: new value must be an integer in the range [-2, 8]")
+        if not isinstance(i, int) or i < 0 or i > 4:
+            raise Exception("error: column number must be an integer in the range [0, 4]")
         self.state[i] = new_row[:]
 
     def test_state(self):
