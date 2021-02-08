@@ -112,12 +112,11 @@ def make_mine_state():
                 print("Invalid row, try again (only numbers allowed).\n")
         if row_num == 2:
             # The middle square is always unknown since the algorithm needs
-            # to solve for it. Allowing another value to the middle won't
-            # break the encoding, but it can be confusing
+            # to solve for it. The user can enter another value, but it is
+            # automatically set to unknown
             new_state.set_square(-1, 2, 2)
 
-    # If the user creates their own state, it is added to the list of states
-    # (for the duration of the program) and tested
+    # Tests the new state
     new_state.test_state()
 
 
