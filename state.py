@@ -10,104 +10,101 @@ from nnf.operators import iff
 
 class MinesweeperState:
 
-    # The minesweeper state
-    state = []
-
-    # The expected result of this state (only used with pre-defined states)
-    expected = None
-
-    # This state's number for pre-defined states, or "new" for a user defined state
-    state_num = ""
-
-    # The solution of this grid
-    solution = None
-
-    '''
-    Boolean condition guide:
-
-    Each of the following lists will contain the boolean values for a specified
-    condition for each square on the 5x5 board. Each square will be given a True
-    or False value for each of these five conditions
-
-    -x is a revealed spot where the number of adjacent mines is equal to the number
-    of adjacent squares that we know are mines (x is 'satisfied'. This means that
-    all of the adjacent unknown squares are safe)
-        -This condition is used to check if the middle square is safe. We can only be
-        sure of the safety of the middle square if there is at least one adjacent x
-    -y is a revealed spot where the number of adjacent mines is equal to the number
-    of adjacent known mines and the number of adjacent unrevealed squares (this
-    means that every unknown square around a y square is a mine)
-        -This condition is used to check if the middle square is a mine. We can only
-        be sure the middle square is a mine if there is at least one adjacent y
-    -m (mine) is a square that has not been revealed and we know it has a mine (a
-    flag in a real game of minesweeper)
-    -s (safe) is a square that has not been revealed and we know it does not have a
-    mine (a square that you would click to reveal in a real game of minesweeper)
-    -u (unknown) is a square that has not been revealed and we don't know if it is a
-    mine or a safe spot
-
-    Notes:
-    -If a square is revealed, it can have 3 possible states:
-        1. True x condition and False for every other condition
-        2. True y condition and False for every other condition
-        3. False for all conditions (the square is revealed but we aren't sure where
-        all the adjacent mines are, i.e not an x or a y. For example, a square with
-        2 adjacent mines but we only know where one of them is)
-
-        Important: It is not possible in our case to have a True x condition and a
-        True y condition. This would occur if a square is a satisfied x with no
-        adjacent unknown squares; but this won't happen because the middle square is
-        unknown and we only find x and y conditions for the inner ring of 8 squares
-
-    -If a square is not revealed, it has to be one of the three revealed conditions:
-        1. If we know the square is a mine, m is True and all other conditions are False
-        2. If we know the square is safe, s is True and all other conditions are False
-        3. If we don't know if the square is a mine or safe, u is True and all other
-        conditions are False
-    '''
-
-    # The x boolean condition for each square
-    x = [[],  # row 1
-         [],  # row 2
-         [],  # row 3
-         [],  # row 4
-         []]  # row 5
-
-    # The y boolean condition for each square
-    y = [[],  # row 1
-         [],  # row 2
-         [],  # row 3
-         [],  # row 4
-         []]  # row 5
-
-    # The m boolean condition for each square
-    m = [[],  # row 1
-         [],  # row 2
-         [],  # row 3
-         [],  # row 4
-         []]  # row 5
-
-    # The u boolean condition for each square
-    u = [[],  # row 1
-         [],  # row 2
-         [],  # row 3
-         [],  # row 4
-         []]  # row 5
-
-    # The s boolean condition for each square
-    s = [[],  # row 1
-         [],  # row 2
-         [],  # row 3
-         [],  # row 4
-         []]  # row 5
-
-    # Encoding initialization
-    E = Encoding()
-
     def __init__(self, new_state, expected_result=None, num="new"):
+
+        # The minesweeper state
         self.state = new_state[:]
+
+        # The solution of this grid (calculated in test_state())
+        self.solution = None
+
+        # The expected result of this state (only used with pre-defined states)
         self.expected = expected_result
+
+        # This state's number for pre-defined states, or "new" for a user defined state
         self.state_num = num
+
+        '''
+        Boolean condition guide:
+
+        Each of the following lists will contain the boolean values for a specified
+        condition for each square on the 5x5 board. Every square will be given a True
+        or False value for each of these five conditions
+
+        -x is a revealed spot where the number of adjacent mines is equal to the number
+        of adjacent squares that we know are mines (x is 'satisfied'. This means that
+        all of the adjacent unknown squares are safe)
+            -This condition is used to check if the middle square is safe. We can only be
+            sure of the safety of the middle square if there is at least one adjacent x
+        -y is a revealed spot where the number of adjacent mines is equal to the number
+        of adjacent known mines and the number of adjacent unrevealed squares (this
+        means that every unknown square around a y square is a mine)
+            -This condition is used to check if the middle square is a mine. We can only
+            be sure the middle square is a mine if there is at least one adjacent y
+        -m (mine) is a square that has not been revealed and we know it has a mine (a
+        flag in a real game of minesweeper)
+        -s (safe) is a square that has not been revealed and we know it does not have a
+        mine (a square that you would click to reveal in a real game of minesweeper)
+        -u (unknown) is a square that has not been revealed and we don't know if it is a
+        mine or a safe spot
+
+        Notes:
+        -If a square is revealed, it can have 3 possible states:
+            1. True x condition and False for every other condition
+            2. True y condition and False for every other condition
+            3. False for all conditions (the square is revealed but we aren't sure where
+            all the adjacent mines are, i.e not an x or a y. For example, a square with
+            2 adjacent mines but we only know where one of them is)
+
+            Important: It is not possible in our case to have a True x condition and a
+            True y condition. This would occur if a square is a satisfied x with no
+            adjacent unknown squares; but this won't happen because the middle square is
+            unknown and we only find x and y conditions for the inner ring of 8 squares
+
+        -If a square is not revealed, it has to be one of the three revealed conditions:
+            1. If we know the square is a mine, m is True and all other conditions are False
+            2. If we know the square is safe, s is True and all other conditions are False
+            3. If we don't know if the square is a mine or safe, u is True and all other
+            conditions are False
+        '''
+
+        # The x boolean condition for each square
+        self.x = [[],  # row 1
+            [],  # row 2
+            [],  # row 3
+            [],  # row 4
+            []]  # row 5
+
+        # The y boolean condition for each square
+        self.y = [[],  # row 1
+            [],  # row 2
+            [],  # row 3
+            [],  # row 4
+            []]  # row 5
+
+        # The m boolean condition for each square
+        self.m = [[],  # row 1
+            [],  # row 2
+            [],  # row 3
+            [],  # row 4
+            []]  # row 5
+
+        # The u boolean condition for each square
+        self.u = [[],  # row 1
+            [],  # row 2
+            [],  # row 3
+            [],  # row 4
+            []]  # row 5
+
+        # The s boolean condition for each square
+        self.s = [[],  # row 1
+            [],  # row 2
+            [],  # row 3
+            [],  # row 4
+            []]  # row 5
+
+        # Encoding initialization (used to solve this model)
+        self.E = Encoding()
 
     def set_square(self, new_value, i, j):
         self.state[i][j] = new_value
