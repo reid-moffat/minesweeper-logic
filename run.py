@@ -18,6 +18,9 @@ import state
 # Contains a list of constant states and their solutions (for testing)
 import predefined_states
 
+# Regex
+import re
+
 
 def main():
     """
@@ -80,38 +83,34 @@ def make_mine_state():
     # Prints out some instructions for how to properly input states
     print("\n=====CUSTOM STATE CREATION=====")
     print("Enter states row by row, Each square separated by a space.")
-    print("Ex. input: -1 -1 2 1 -2")
     print("Center spot should be unknown (-1), this is what it is solving for.")
     print("Key:")
     print("-2: mine")
     print("-1: unknown")
     print("0 <= n <= 8: revealed number square with n adjacent mines")
+    print("Ex. input: -1 -1 2 1 -2 (press enter to submit)")
 
     # Applies user inputted numbers to the state
-    for i in range(5):
+    for row_num in range(5):
         # Print out intermediate state
         new_state.print_state()
 
         # Prompts the user to input a row, checks if it is valid and applies
         # it to the state if it is. If not, loop until a valid row is inputted
         while True:
-            spot = input("Enter row %d: " % (i + 1))
-            try:  # Make sure all the inputs are numbers
+            spot = input("Enter row %d: " % (row_num + 1))
+            if re.match("^[0-9 ]+$", spot):  # Make sure all the inputs are numbers
                 new_row = [int(x) for x in spot.split()]
                 if len(new_row) == 5:  # Must have 5 values in the row
-                    valid_row = True
-                    for x in new_row:
-                        if not (-2 <= x <= 8):  # Each value must be valid
-                            print("Each value must be in the range [-2, 8]\n")
-                            valid_row = False
-                    if valid_row:
-                        new_state.set_row(new_row, i)
+                    if all([i >= -2 and i <= 8 for i in new_row]):
+                        new_state.set_row(new_row, row_num)
                         break
+                    print("Each value must be in the range [-2, 8]\n")
                 else:
                     print("5 values required, try again.\n")
-            except ValueError:
-                print("Invalid row, try again.\n")
-        if i == 2:
+            else:
+                print("Invalid row, try again (only numbers allowed).\n")
+        if row_num == 2:
             # The middle square is always unknown since the algorithm needs
             # to solve for it. Allowing another value to the middle won't
             # break the encoding, but it can be confusing
