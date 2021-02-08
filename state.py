@@ -70,38 +70,38 @@ class MinesweeperState:
 
         # The x boolean condition for each square
         self.x = [[],  # row 1
-            [],  # row 2
-            [],  # row 3
-            [],  # row 4
-            []]  # row 5
+                  [],  # row 2
+                  [],  # row 3
+                  [],  # row 4
+                  []]  # row 5
 
         # The y boolean condition for each square
         self.y = [[],  # row 1
-            [],  # row 2
-            [],  # row 3
-            [],  # row 4
-            []]  # row 5
+                  [],  # row 2
+                  [],  # row 3
+                  [],  # row 4
+                  []]  # row 5
 
         # The m boolean condition for each square
         self.m = [[],  # row 1
-            [],  # row 2
-            [],  # row 3
-            [],  # row 4
-            []]  # row 5
+                  [],  # row 2
+                  [],  # row 3
+                  [],  # row 4
+                  []]  # row 5
 
         # The u boolean condition for each square
         self.u = [[],  # row 1
-            [],  # row 2
-            [],  # row 3
-            [],  # row 4
-            []]  # row 5
+                  [],  # row 2
+                  [],  # row 3
+                  [],  # row 4
+                  []]  # row 5
 
         # The s boolean condition for each square
         self.s = [[],  # row 1
-            [],  # row 2
-            [],  # row 3
-            [],  # row 4
-            []]  # row 5
+                  [],  # row 2
+                  [],  # row 3
+                  [],  # row 4
+                  []]  # row 5
 
         # Encoding initialization (used to solve this model)
         self.E = Encoding()
@@ -124,7 +124,7 @@ class MinesweeperState:
 
         self.__create_encoding()  # Adds the constraints and state variables
         self.solution = self.E.solve()  # Solves the encoding
-        
+
         self.print_state()
 
         # Prints if the encoding is satisfiable, the expected result and model result
