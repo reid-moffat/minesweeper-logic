@@ -73,7 +73,7 @@ def use_predefined_state():
 
 def make_mine_state():
     """
-    Creates a new minesweeper state with user input
+    Creates and tests a new minesweeper state with user input
     """
     # Initializes a default state of all unknowns
     # This makes it easier to print out intermediary states
@@ -90,18 +90,22 @@ def make_mine_state():
     print("0 <= n <= 8: revealed number square with n adjacent mines")
     print("Ex. input: -1 -1 2 1 -2 (press enter to submit)")
 
-    # Applies user inputted numbers to the state
+    # Collects and applies user input to the unknown state
     for row_num in range(5):
         # Print out intermediate state
         new_state.print_state()
 
         # Prompts the user to input a row, checks if it is valid and applies
-        # it to the state if it is. If not, loop until a valid row is inputted
+        # it to the state if it is. If not, prints out the issue and loops
+        # until a valid row is inputted
         while True:
             spot = input("Enter row %d: " % (row_num + 1))
-            if re.match("^[0-9 ]+$", spot):  # Make sure all the inputs are numbers
+            # Checks if the input is just numbers (and spaces)
+            if re.match("^[0-9 ]+$", spot):
                 new_row = [int(x) for x in spot.split()]
-                if len(new_row) == 5:  # Must have 5 values in the row
+                # Must have 5 values in the row
+                if len(new_row) == 5:
+                    # Each value must be a mine (-2), safe (-1) or revealed (0-8)
                     if all([i >= -2 and i <= 8 for i in new_row]):
                         new_state.set_row(new_row, row_num)
                         break
