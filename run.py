@@ -43,7 +43,8 @@ def main():
 
 def use_predefined_state():
     """
-    Prompts the user with the predefined states and tests the chosen state
+    Prompts the user to choose a predefined state (from predefined_states.py),
+    solves it and prints the expected and model result
     """
 
     # predefined_states has an expected result for each state
@@ -57,18 +58,18 @@ def use_predefined_state():
     for i in states:
         i.print_state()
 
-    # Loops until the user chooses a valid state, then solves the state and prints out details
+    # Loops until a valid state is chosen, solves it and prints the result
     while True:
-        state_number = input("Choose a state between 1 and %d: " % num_states).strip()
-        if state_number.isnumeric():
-            state_number = int(state_number)
+        state_num = input("Choose a state between 1 and %d: " % num_states).strip()
+        if state_num.isnumeric():
+            state_number = int(state_num)
             if 1 <= state_number <= num_states:
                 states[state_number-1].test_state()
                 break
             else:
-                print("Invalid choice\n")
+                print("Invalid choice: enter an integer in the range [1, %d]\n" % num_states)
         else:
-            print("Invalid choice\n")
+            print("Invalid choice: enter an integer\n")
 
 
 def make_mine_state():
