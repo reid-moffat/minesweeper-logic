@@ -107,7 +107,7 @@ def make_mine_state():
                 # Must have 5 values in the row
                 if len(new_row) == 5:
                     # Each value must be a mine (-2), safe (-1) or revealed (0-8)
-                    if all([i >= -2 and i <= 8 for i in new_row]):
+                    if all([-2 <= i <= 8 for i in new_row]):
                         new_state.set_row(new_row, row_num)
                         break
                     print("Each value must be in the range [-2, 8]\n")
