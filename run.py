@@ -12,7 +12,7 @@ Reid Moffat after submission
         Reid Moffat
 """
 
-# A class to represnt minesweeper states
+# A class to represent minesweeper states
 import state
 
 # Contains a list of constant states and their solutions (for testing)
