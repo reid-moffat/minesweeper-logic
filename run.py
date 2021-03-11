@@ -49,7 +49,7 @@ def use_predefined_state():
 
     # predefined_states has an expected result for each state
     num_states = len(predefined_states.state_list) // 2
-    # Creates a list of all predefeind states as minesweeper state objects
+    # Creates a list of all predefined states as minesweeper state objects
     states = [state.MinesweeperState(predefined_states.state_list[2*i],
               predefined_states.state_list[2*i+1], i) for i in range(num_states)]
 
@@ -82,14 +82,15 @@ def make_mine_state():
     new_state = state.MinesweeperState(unknown_state)
 
     # Prints out some instructions for how to properly input states
-    print("\n=====CUSTOM STATE CREATION=====")
-    print("Enter states row by row, Each square separated by a space.")
-    print("Center spot should be unknown (-1), this is what it is solving for.")
-    print("Key:")
-    print("-2: mine")
-    print("-1: unknown")
-    print("0 <= n <= 8: revealed number square with n adjacent mines")
-    print("Ex. input: -1 -1 2 1 -2 (press enter to submit)")
+    instructions = "\n=====CUSTOM STATE CREATION=====" \
+                   "Enter states row by row, Each square separated by a space." \
+                   "Center spot should be unknown (-1), this is what it is solving for." \
+                   "Key:" \
+                   "-2: mine" \
+                   "-1: unknown" \
+                   "0 <= n <= 8: revealed number square with n adjacent mines" \
+                   "Ex. input: -1 -1 2 1 -2 (press enter to submit)"
+    print(instructions)
 
     # Collects and applies user input to the unknown state
     for row_num in range(5):
