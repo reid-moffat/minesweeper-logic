@@ -44,7 +44,7 @@ def use_predefined_state():
 
     # Creates a list of all predefined states as minesweeper state objects
     num_states = len(state_list)
-    states = [MinesweeperState(i['state'], i['solution'], i) for i in state_list]
+    states = [MinesweeperState(state_list[i]['state'], state_list[i]['solution'], i) for i in state_list]
 
     # Prints out all of the predefined states
     print("Here the the predefined states:")
