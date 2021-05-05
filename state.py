@@ -1,10 +1,12 @@
-# The Encoding class is used to solve the model
+"""
+Minesweeper state class
+
+Represents and solves a 5x5 minesweeper state
+"""
+
+from typing import List
 from lib204 import Encoding
-
-# Var is an object used to store boolean conditions
 from nnf import Var
-
-# The iff method is used to determine the middle square's state
 from nnf.operators import iff
 
 
@@ -12,17 +14,10 @@ class MinesweeperState:
 
     def __init__(self, new_state, expected_result=None, num="new"):
 
-        # The minesweeper state
-        self.state = new_state[:]
-
-        # The solution of this grid (calculated in test_state())
-        self.solution = None
-
-        # The expected result of this state (only used with pre-defined states)
-        self.expected = expected_result
-
-        # This state's number for pre-defined states, or "new" for a user defined state
-        self.state_num = num
+        self.state = new_state[:]  # 5x5 minesweeper state
+        self.solution = None  # Model solution solved with an encoding
+        self.expected = expected_result  # Only used with predefined states
+        self.state_num = num  # Number for predefined states (or 'new' for user defined states)
 
         '''
         Boolean condition guide:
@@ -68,79 +63,73 @@ class MinesweeperState:
             conditions are False
         '''
 
-        # The x boolean condition for each square
+        # x boolean condition for each square
         self.x = [[],  # row 1
                   [],  # row 2
                   [],  # row 3
                   [],  # row 4
                   []]  # row 5
 
-        # The y boolean condition for each square
+        # y boolean condition for each square
         self.y = [[],  # row 1
                   [],  # row 2
                   [],  # row 3
                   [],  # row 4
                   []]  # row 5
 
-        # The m boolean condition for each square
+        # mine boolean condition for each square
         self.m = [[],  # row 1
                   [],  # row 2
                   [],  # row 3
                   [],  # row 4
                   []]  # row 5
 
-        # The u boolean condition for each square
+        # unknown boolean condition for each square
         self.u = [[],  # row 1
                   [],  # row 2
                   [],  # row 3
                   [],  # row 4
                   []]  # row 5
 
-        # The s boolean condition for each square
+        # safe boolean condition for each square
         self.s = [[],  # row 1
                   [],  # row 2
                   [],  # row 3
                   [],  # row 4
                   []]  # row 5
 
-        # Encoding initialization (used to solve this model)
-        self.E = Encoding()
+        self.E = Encoding()  # Encoding initialization used to solve this model
 
-    def set_square(self, new_value, i, j):
+    def set_square(self, i: int, j: int, new_value: int):
         """
         Sets a specified square in this state to a specified value, raising an exception
         if a parameter is not in the correct range
 
-        @param new_value: a new value for the square
-        @type new_value: integer (-2 <= new_value <= 8)
         @param i: column number
-        @type i: integer (0 <= i <= 4)
         @param j: row number
-        @type j: integer (1 <= j <= 4)
+        @param new_value: a new value for the square
         """
-        if not isinstance(new_value, int) or new_value < -2 or new_value > 8:
-            raise Exception("error: new value must be an integer in the range [-2, 8]")
-        if not isinstance(i, int) or i < 0 or i > 4:
+        if not isinstance(i, int) or not 0 <= i <= 4:
             raise Exception("error: column number must be an integer in the range [0, 4]")
-        if not isinstance(j, int) or j < 0 or j > 4:
+        if not isinstance(j, int) or not 0 <= j <= 4:
             raise Exception("error: row number must be an integer in the range [0, 4]")
+        if not isinstance(new_value, int) or not -2 <= new_value <= 8:
+            raise Exception("error: new value must be an integer in the range [-2, 8]")
         self.state[i][j] = new_value
 
-    def set_row(self, new_row, i):
+    def set_row(self, i: int, new_row: List):
         """
         Sets the specified row to a new row (values are copied), raising an exception
         if a parameter is not in the correct range
 
-        @param new_row: the new row of squares
-        @type new_row: list of five integers in the range [-2, 8]
         @param i: row number
-        @type i: integer (1 <= i <= 5)
+        @param new_row: the new row of squares
         """
+        if not isinstance(i, int) or not 0 <= i <= 4:
+            raise Exception("error: column number must be an integer in the range [0, 4]")
         if not isinstance(new_row, list) or len(new_row) != 5 \
                 or not all([True if isinstance(square, int) and -2 <= square <= 8 else False for square in new_row]):
-            raise Exception("error: new value must be an integer in the range [-2, 8]")
-        if not isinstance(i, int) or i < 0 or i > 4:
-            raise Exception("error: column number must be an integer in the range [0, 4]")
+            raise Exception("error: new row must have 5 integers in the range [-2, 8]")
         self.state[i] = new_row[:]
 
     def test_state(self):
@@ -162,43 +151,32 @@ class MinesweeperState:
         print("SATISFIABLE: " + str(self.E.is_satisfiable()) + "\n")
         if self.expected:
             print("Expected result:", self.expected)
-        print("Model result: %s\n" % self.get_solution())
+        print(f"Model result: {self.get_solution()}\n")
 
-        while True:
-            print_solution = input("Would you like to see the full solution states (y/n)? ")
-            try:
-                print_solution.strip().lower()
-                if print_solution == 'y':
-                    # Prints the solution
-                    # The format of this is the boolean values of u, m, x and y for
-                    # each square as well as the s condition value for the middle square
-                    print("\nSOLUTION:")
-                    middle_squares = [1, 2, 3]
-                    for i in middle_squares:
-                        for j in middle_squares:
-                            num = str(i) + str(j)
-                            keyu = "u" + num
-                            keym = "m" + num
-                            keyx = "x" + num
-                            keyy = "y" + num
-                            print(keyu, self.solution[keyu])
-                            print(keym, self.solution[keym])
-                            print(keyx, self.solution[keyx])
-                            print(keyy, self.solution[keyy])
-                            if i == 2 and j == 2:
-                                print("s22", self.solution["s22"])
-                            print()
-                    break
-                elif print_solution == 'n':
-                    break
-                else:
-                    print("Invalid input\n")
-            except:
-                print("Invalid input\n")
+        if input("Would you like to see the full solution states ('y' to see)? ").strip().lower() == 'y':
+            # Prints the solution
+            # The format of this is the boolean values of u, m, x and y for
+            # each square as well as the s condition value for the middle square
+            print("\nSOLUTION:")
+            middle_squares = [1, 2, 3]
+            for i in middle_squares:
+                for j in middle_squares:
+                    num = str(i) + str(j)
+                    keyu = "u" + num
+                    keym = "m" + num
+                    keyx = "x" + num
+                    keyy = "y" + num
+                    print(keyu, self.solution[keyu])
+                    print(keym, self.solution[keym])
+                    print(keyx, self.solution[keyx])
+                    print(keyy, self.solution[keyy])
+                    if i == 2 and j == 2:
+                        print("s22", self.solution["s22"])
+                    print()
 
     def __create_encoding(self):
         """
-        Calls all the functions in the correct order
+        Sets up the grid with the required encodings
         """
         self.__set_initial_state()
         self.__set_truth_encodings()
@@ -207,7 +185,7 @@ class MinesweeperState:
         """
         Sets the initial state of this minesweeper grid
         """
-        grid_range = range(5)  # A range variable used to iterate through the grid
+        grid_range = range(5)
 
         # Instantiates Var objects for u, m and s cases for the 5x5 grid
         for i in grid_range:
@@ -229,30 +207,15 @@ class MinesweeperState:
                     if not (-2 <= state <= 8):
                         raise Exception('error: each square of the grid must have a'
                                         ' value between -2 and 8 inclusive. Square '
-                                        '[%d][%d] has a value of %d' % (i, j, state))
+                                        f'[{i}][{j}] has a value of {state}')
 
-                    if state == -2:  # mine
-                        self.E.add_constraint(self.m[i][j])
-                    else:
-                        self.E.add_constraint(~self.m[i][j])
+                    self.E.add_constraint(self.m[i][j] if state == -2 else ~self.m[i][j])  # mine
+                    self.E.add_constraint(self.u[i][j] if state == -1 else ~self.u[i][j])  # unknown
+                    self.E.add_constraint(self.s[i][j] if state > -1 else ~self.s[i][j])  # revealed square
 
-                    if state == -1:  # unknown
-                        self.E.add_constraint(self.u[i][j])
-                    else:
-                        self.E.add_constraint(~self.u[i][j])
-
-                    if state > -1:  # revealed square
-                        self.E.add_constraint(self.s[i][j])
-                    else:
-                        self.E.add_constraint(~self.s[i][j])
-
-        # Initializing x and y cases
+        # Initializing x and y cases for the center 3x3 grid
         for i in grid_range:
             for j in grid_range:
-                # We are only initializing the x and y truth values for the inner
-                # 9 squares
-                # The outer ring of squares can sometimes be determined for x and
-                # y values, but that is beyond our scope
                 if 0 < i < 4 and 0 < j < 4:
                     self.__set_x_truth(i, j)
                     self.__set_y_truth(i, j)
@@ -260,14 +223,12 @@ class MinesweeperState:
                     self.x[i].append(Var("x" + str(i) + str(j)))
                     self.y[i].append(Var("y" + str(i) + str(j)))
 
-    def __set_x_truth(self, i, j):
+    def __set_x_truth(self, i: int, j: int):
         """
         Sets the x truth values a given square in a grid
 
         @param i: row number of the square
-        @type i: integer (1 <= i <= 3)
         @param j: column number of the square
-        @type j: integer (1 <= j <= 3)
         """
 
         # This constant list is used to quickly get the coordinates of adjacent squares
@@ -291,14 +252,12 @@ class MinesweeperState:
         else:
             self.E.add_constraint(~self.x[i][j])
 
-    def __set_y_truth(self, i, j):
+    def __set_y_truth(self, i: int, j: int):
         """
         Sets the y truth values a given square in a grid
 
         @param i: row number of the square
-        @type i: integer (1 <= i <= 3)
         @param j: column number of the square
-        @type j: integer (1 <= j <= 3)
         """
 
         # This constant list is used to quickly get the coordinates of adjacent squares
@@ -341,7 +300,7 @@ class MinesweeperState:
         # If the middle square isn't a mine or safe, it is unknown
         self.E.add_constraint(iff(~self.m[2][2] & ~self.s[2][2], self.u[2][2]))
 
-    def get_solution(self):
+    def get_solution(self) -> str:
         """
         Returns the english representation of the solution
 
@@ -352,7 +311,6 @@ class MinesweeperState:
         @return 'unknown': if the middle square is unknown
         @return an error message: if the grid could not be solved or an error occurred
                     (this should not happen, check constraints if you see this)
-        @rtype: string
         """
 
         try:
@@ -363,7 +321,7 @@ class MinesweeperState:
             if self.solution['s22']:
                 return "safe"
             return "unknown"
-        except:
+        except KeyError:
             return "error: key 'm22' or 's22' does not exist.\
                     Model is not satisfiable or an error occurred"
 
@@ -374,9 +332,9 @@ class MinesweeperState:
         Prints a 'box' with each square being either a number (of adjacent mines),
         a question mark (unknown) or an M (mine). Also includes the state number
         """
-        grid_range = range(5)  # A range variable used to iterate through the grid
+        grid_range = range(5)
 
-        print("\nSTATE %s:" % (str(self.state_num)))
+        print(f"\nSTATE {str(self.state_num)}:")
         print("-----------")
         for i in grid_range:
             print('|', end='')

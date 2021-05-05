@@ -12,14 +12,9 @@ Reid Moffat after submission
         Reid Moffat
 """
 
-# A class to represent minesweeper states
-import state
-
-# Contains a list of constant states and their solutions (for testing)
-import predefined_states
-
-# Regex
-import re
+from state import MinesweeperState
+from predefined_states import state_list
+from re import match, sub
 
 
 def main():
@@ -31,7 +26,7 @@ def main():
     # Loops until the user chooses to use a predefined state or make their own
     while True:
         choice = input("Would you like to use a predefined state (y/n)? ").strip().lower()
-        if choice == 'y' or choice == 'n':
+        if choice in ['y', 'n']:
             break
         print("Invalid choice\n")
 
@@ -47,11 +42,9 @@ def use_predefined_state():
     solves it and prints the expected and model result
     """
 
-    # predefined_states has an expected result for each state
-    num_states = len(predefined_states.state_list) // 2
     # Creates a list of all predefined states as minesweeper state objects
-    states = [state.MinesweeperState(predefined_states.state_list[2*i],
-              predefined_states.state_list[2*i+1], i) for i in range(num_states)]
+    num_states = len(state_list)
+    states = [MinesweeperState(i['state'], i['solution'], i) for i in state_list]
 
     # Prints out all of the predefined states
     print("Here the the predefined states:")
@@ -60,16 +53,12 @@ def use_predefined_state():
 
     # Loops until a valid state is chosen, solves it and prints the result
     while True:
-        state_num = input("Choose a state between 1 and %d: " % num_states).strip()
-        if state_num.isnumeric():
-            state_number = int(state_num)
-            if 1 <= state_number <= num_states:
-                states[state_number-1].test_state()
-                break
-            else:
-                print("Invalid choice: enter an integer in the range [1, %d]\n" % num_states)
+        state_num = input(f"Choose a state between 1 and {num_states}: ").strip()
+        if state_num.isnumeric() and 1 <= int(state_num) <= num_states:
+            states[int(state_num) - 1].test_state()
+            break
         else:
-            print("Invalid choice: enter an integer\n")
+            print(f"Invalid choice: enter an integer in the range [1, {num_states}]\n")
 
 
 def make_mine_state():
@@ -78,10 +67,9 @@ def make_mine_state():
     """
     # Initializes a default state of all unknowns
     # This makes it easier to print out intermediary states
-    unknown_state = [[-1 for i in range(5)] for i in range(5)]
-    new_state = state.MinesweeperState(unknown_state)
+    unknown_state = [[-1] * 5] * 5
+    new_state = MinesweeperState(unknown_state)
 
-    # Prints out some instructions for how to properly input states
     instructions = "\n=====CUSTOM STATE CREATION=====" \
                    "Enter states row by row, Each square separated by a space." \
                    "Center spot should be unknown (-1), this is what it is solving for." \
@@ -94,35 +82,24 @@ def make_mine_state():
 
     # Collects and applies user input to the unknown state
     for row_num in range(5):
-        # Print out intermediate state
-        new_state.print_state()
+        new_state.print_state()  # Print out intermediate state
 
         # Prompts the user to input a row, checks if it is valid and applies
         # it to the state if it is. If not, prints out the issue and loops
         # until a valid row is inputted
         while True:
-            spot = input("Enter row %d: " % (row_num + 1))
-            # Checks if the input is just numbers (and spaces)
-            if re.match("^[0-9 ]+$", spot):
-                new_row = [int(x) for x in spot.split()]
-                # Must have 5 values in the row
-                if len(new_row) == 5:
-                    # Each value must be a mine (-2), safe (-1) or revealed (0-8)
-                    if all([-2 <= i <= 8 for i in new_row]):
-                        new_state.set_row(new_row, row_num)
-                        break
-                    print("Each value must be in the range [-2, 8]\n")
-                else:
-                    print("5 values required, try again.\n")
+            spot = sub(r'\s+', ' ', input(f"Enter row {row_num + 1}: ").strip())
+            if match("^((-1|-2|[0-8]) ){4}(-1|-2|[0-8])$", spot):
+                new_state.set_row(row_num, [int(x) for x in spot.split()])
+                break
             else:
-                print("Invalid row, try again (only numbers allowed).\n")
+                print("Invalid row, must have 5 numbers in the range [-2, 8]\n")
         if row_num == 2:
             # The middle square is always unknown since the algorithm needs
             # to solve for it. The user can enter another value, but it is
             # automatically set to unknown
-            new_state.set_square(-1, 2, 2)
+            new_state.set_square(2, 2, -1)
 
-    # Tests the new state
     new_state.test_state()
 
 
