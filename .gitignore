@@ -133,9 +133,5 @@ dmypy.json
 .pyre/
 
 # misc
-./idea
-./idea/
-__pycache__
-__pycache__/
 bin/
-.replit/
+.replit

@@ -10,4 +10,4 @@ Professor: Christian Muise
 
 This project will use propositional logic to solve minesweeper states
 
-Open and run `run.py` to begin
+Open and run `src/run.py` to begin
