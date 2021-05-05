@@ -131,3 +131,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# misc
+./idea
+./idea/
+__pycache__
+__pycache__/
+bin/
+.replit/
