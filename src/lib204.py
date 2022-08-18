@@ -1,4 +1,3 @@
-
 from nnf import And, dsharp, NNF, config
 
 
@@ -13,10 +12,7 @@ class Encoding(object):
         return ret
 
     def size(self):
-        ret = 0
-        for c in self.constraints:
-            ret += c.size()
-        return ret
+        return sum([c.size() for c in self.constraints])
 
     def valid(self):
         return And(self.constraints).valid()
@@ -36,12 +32,9 @@ class Encoding(object):
     def solve(self):
         return And(self.constraints).solve()
 
-    def count_solutions(self, lits=[]):
-        if lits:
-            T = And(self.constraints + lits)
-        else:
-            T = And(self.constraints)
+    def count_solutions(self, lst):
+        T = And(self.constraints + lst)
         return dsharp.compile(T.to_CNF(), executable='bin/dsharp').model_count()
 
     def likelihood(self, lit):
-        return self.count_solutions([lit]) / self.count_solutions()
+        return self.count_solutions([lit]) / self.count_solutions([])

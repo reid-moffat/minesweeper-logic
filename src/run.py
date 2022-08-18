@@ -25,7 +25,8 @@ def main():
 
     # Loops until the user chooses to use a predefined state or make their own
     while True:
-        choice = input("Would you like to use a predefined state (y/n)? ").strip().lower()
+        choice = input("Would you like to use a predefined state (y/n)? ")\
+            .strip().lower()
         if choice in ['y', 'n']:
             break
         print("Invalid choice\n")
@@ -44,7 +45,8 @@ def use_predefined_state():
 
     # Creates a list of all predefined states as minesweeper state objects
     num_states = len(state_list)
-    states = [MinesweeperState(state_list[i]['state'], state_list[i]['solution'], i) for i in state_list]
+    states = [MinesweeperState(state_list[i]['state'],
+              state_list[i]['solution'], i) for i in state_list]
 
     # Prints out all of the predefined states
     print("Here the the predefined states:")
@@ -58,7 +60,8 @@ def use_predefined_state():
             states[int(state_num) - 1].test_state()
             break
         else:
-            print(f"Invalid choice: enter an integer in the range [1, {num_states}]\n")
+            print(f"Invalid choice: enter an integer in the range [1, "
+                  f"{num_states}]\n")
 
 
 def make_mine_state():
@@ -70,15 +73,14 @@ def make_mine_state():
     unknown_state = [[-1] * 5] * 5
     new_state = MinesweeperState(unknown_state)
 
-    instructions = "\n=====CUSTOM STATE CREATION=====" \
-                   "Enter states row by row, Each square separated by a space." \
-                   "Center spot should be unknown (-1), this is what it is solving for." \
-                   "Key:" \
-                   "-2: mine" \
-                   "-1: unknown" \
-                   "0 <= n <= 8: revealed number square with n adjacent mines" \
-                   "Ex. input: -1 -1 2 1 -2 (press enter to submit)"
-    print(instructions)
+    print("\n=====CUSTOM STATE CREATION=====\n"
+          "Enter states row by row, Each square separated by a space.\n"
+          "Center spot should be unknown (-1), this is what it is solving for."
+          "\nKey:\n"
+          "-2: mine\n"
+          "-1: unknown\n"
+          "0 <= n <= 8: revealed number square with n adjacent mines\n"
+          "Ex. input: -1 -1 2 1 -2 (press enter to submit)")
 
     # Collects and applies user input to the unknown state
     for row_num in range(5):
