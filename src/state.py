@@ -74,46 +74,26 @@ class MinesweeperState:
         '''
 
         # x boolean condition for each square
-        self.x = [[],  # row 1
-                  [],  # row 2
-                  [],  # row 3
-                  [],  # row 4
-                  []]  # row 5
+        self.x = [[] for i in range(5)]
 
         # y boolean condition for each square
-        self.y = [[],  # row 1
-                  [],  # row 2
-                  [],  # row 3
-                  [],  # row 4
-                  []]  # row 5
+        self.y = [[] for i in range(5)]
 
         # mine boolean condition for each square
-        self.m = [[],  # row 1
-                  [],  # row 2
-                  [],  # row 3
-                  [],  # row 4
-                  []]  # row 5
+        self.m = [[] for i in range(5)]
 
         # unknown boolean condition for each square
-        self.u = [[],  # row 1
-                  [],  # row 2
-                  [],  # row 3
-                  [],  # row 4
-                  []]  # row 5
+        self.u = [[] for i in range(5)]
 
         # safe boolean condition for each square
-        self.s = [[],  # row 1
-                  [],  # row 2
-                  [],  # row 3
-                  [],  # row 4
-                  []]  # row 5
+        self.s = [[] for i in range(5)]
 
         self.E = Encoding()  # Encoding initialization used to solve this model
 
     def set_square(self, i: int, j: int, new_value: int):
         """
-        Sets a specified square in this state to a specified value, raising an exception
-        if a parameter is not in the correct range
+        Sets a specified square in this state to a specified value, raising an
+        exception if a parameter is not in the correct range
 
         @param i: column number
         @param j: row number
@@ -215,9 +195,10 @@ class MinesweeperState:
                     state = self.state[i][j]
                     # Raises an exception if a square has an illegal value
                     if not (-2 <= state <= 8):
-                        raise Exception('error: each square of the grid must have a'
-                                        ' value between -2 and 8 inclusive. Square '
-                                        f'[{i}][{j}] has a value of {state}')
+                        raise Exception('error: each square of the grid must'
+                                        'have a value between -2 and 8'
+                                        f'inclusive. Square [{i}][{j}] has a'
+                                        f'value of {state}')
 
                     self.E.add_constraint(self.m[i][j] if state == -2 else ~self.m[i][j])  # mine
                     self.E.add_constraint(self.u[i][j] if state == -1 else ~self.u[i][j])  # unknown
